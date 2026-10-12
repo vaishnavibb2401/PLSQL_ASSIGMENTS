@@ -1,0 +1,145 @@
+-------------date function---------------------
+
+--add_month()
+ select add_months(sysdate,4) from dual;
+ 
+ select add_months(hire_date,2),hire_date,salary from hr.employees;-- adding a months in current months how many months wants to forward
+ 
+ select add_months(hire_date,-2),hire_date,salary from hr.employees;--adding a months in current months how many months wants to backward also
+ 
+ --sysdate (system date)
+ --current date (server date)
+ 
+ 
+-- extract()
+-- extract the any part of the table only date and time  compnentes 
+ 
+select extract(month from hire_date),hire_date from hr.employees;
+
+SELECT * FROM HR.EMPLOYEES;
+
+
+--for practice 
+
+--1 Extract the month from hire_date for all employees.
+ 
+select hire_date,  extract(month from hire_date)from hr.employees;
+
+--2 Extract the year from hire_date.
+
+select hire_date, extract(year from hire_date)from hr.employees;
+
+--3 Extract the day from hire_date.
+
+select hire_date,extract(day from hire_date)from hr.employees;
+
+-- 4 Display first_name, hire_date, and the month number of joining.
+
+select first_name,hire_date, extract(month from hire_date )from hr.employees; 
+
+-- 5 Display only the year of joining for employee EMPLOYEE_ID = 101.
+
+select employee_id, extract(year from hire_date)emp_year from hr.employees
+where employee_id ='101';
+
+-- 6 display only day of joining  those who has salary is graeter than 2000 and its desc
+
+
+select salary ,extract(day from hire_date)from hr.employees 
+where salary >2000
+order by salary desc ;
+
+-- 7 Find employees who joined in the year 2005.
+
+select hire_date  from hr.employees
+where extract(year from hire_date)=2005;
+
+--8 Get employees who joined in the month of June (any year).
+
+select hire_date from hr.employees
+where extract(month from hire_date)= 6 ;
+
+-- 9 Count how many employees joined in each year.
+
+select count(extract(year from hire_date))from hr.employees;
+
+
+-- to_date ()
+
+-- Convert the string '17-06-2005' into a DATE using TO_DATE.   
+
+select to_date('17-06-2006','dd-mm-yy')from dual;
+
+--Find employees who joined before 01-JAN-2008.
+
+SELECT HIRE_DATE
+FROM hr.employees
+WHERE hire_date < TO_DATE('01-JAN-2008','DD-MON-YYYY');
+
+
+------
+select * from hr.employees
+
+---Display department_id wise employee count and total salary, ordered by total salary descending.
+
+select department_id , count(*),sum(salary)total_salary from hr.employees
+group by department_id 
+order by total_salary desc;
+
+
+--Display department_id wise total salary including commission using NVL.
+
+select department_id ,sum(salary)total_salary, nvl(commision_pct,1) from hr.employees
+group by department_id ;
+
+
+----employees who were hired in the year 2003
+select * from hr.employees
+where to_char(hire_date,'YYYY') = '2003';
+
+
+---
+
+select count(*) from hr.employees
+where commission_pct is not null  ------ for not null
+
+
+--average salary of employees whose salary is greater than 3000
+
+select avg(salary) from hr.employees
+where salary >3000
+
+
+
+
+
+
+
+
+
+
+
+
+----requirments ----
+-- Find completed years from '24-01-2003' till today.
+
+
+SELECT TRUNC(months_between(SYSDATE,
+       to_date('24-01-2003','DD-MM-YYYY'))/12) AS years
+FROM dual;
+
+--
+
+SELECT  TRUNC(MONTHS_BETWEEN(SYSDATE, DATE '1998-06-15') / 12) AS years from dual;
+
+
+---calulate the months  how many months will be complete
+
+select trunc(mod(months_between(SYSDATE, to_date('24-01-2003','DD-MM-YYYY')),12))completed_months from dual;
+       
+--
+select trunc( mod(months_between(sysdate,date '2003-01-24'),12))completed_months from dual;
+
+---calcullate the day 
+
+select sysdate add_months('2003-01-24',11)as completed_days from dual;

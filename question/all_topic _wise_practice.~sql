@@ -1,0 +1,243 @@
+-- string function --
+
+
+-- concat()--
+
+-- Display first_name and last_name together as Full Name.
+
+select first_name||' '|| last_name from hr.employees;
+
+--Display employee_id and first_name together with a hyphen 
+
+select employee_id ||'-'|| first_name from hr.employees;
+
+--Display email and job_id separated by a space.
+select email ||'    '||job_id from hr.employees;
+
+--Display first_name and hire_date (Steven joined on 17-JUN-03)
+
+select first_name ||' joined on '|| hire_date from hr.employees;
+
+--Display job_id and salary (IT_PROG : 9000)
+
+select job_id ||' : '|| salary from hr.employees;
+
+--Display full name and annual salary (Steven King Annual Salary: 288000)
+
+select first_name||' '||last_name ||'Annual Salary '||(salary*12) as full_name_salary  from hr.employees;
+
+select * from hr.employees
+ 
+
+--Display employee_id and first_name together, separated by a space, using CONCAT.
+
+select employee_id ||' , '|| first_name from hr.employees;
+
+--Display first_name, job_id, and department_id in one string
+
+select first_name||' '||job_id||' '||department_id from hr.employees;
+
+--Display first_name + last_name only for employees in department 50
+select first_name ||''||last_name, department_id from hr.employees
+where department_id = 50;
+
+select* from hr.employees;
+
+--Display first_name + last_name only for employees salary is greater than 24000 and there commision is not null
+
+select first_name||' '|| last_name ,salary, commission_pct from hr.employees
+where salary < 24000 and commission_pct is not null;
+
+-- Display department_name along with text ' managed by ' and manager_id, showing 0 if manager_id is NULL.
+
+select department_name ||'managed by'||manager_id,nvl(manager_id,0) from hr.departments;   
+
+--Display department_id and department_name in one column, showing 'NA' if department_name is NULL.
+
+select department_id ||''|| department_name ,nvl(department_name,'NA')from hr.departments;
+
+--Display department_name with text ' located at ' and location_id, showing 9999 if location_id is NULL.
+
+select department_name ||'located at'||location_id ,nvl(location_id,9999)from hr.departments; 
+
+--Display department_id, a hyphen (-), and manager_id, showing 'Not Assigned' if manager_id is NULL.
+
+select department_id ||'_'||manager_id ,manager_id,nvl(to_char(manager_id),'notassigned')from hr.departments;
+
+
+----------initcap()-----------------
+
+
+--Display first_name in InitCap format.
+
+select first_name ,initcap(first_name)from hr.employees;
+
+--Display full name (first + last) in InitCap.
+
+select initcap(first_name||' '||last_name) as full_name from hr.employees;
+
+--Display full name with hyphen: use initcap those who have employee_id is 100 
+
+
+select initcap(first_name||'_'||last_name)as fullname from hr.employees
+where employee_id=100;
+
+
+select * from hr.employees;
+
+--Display employees whose first_name starts with lowercase but show it in InitCap.
+
+select initcap(first_name) as first_name from hr.employees
+where first_name = lower(first_name)
+and substr(first_name,1,1)between 'a'and 'z';
+
+
+--Display employees whose last_name is stored in uppercase and show it in InitCap.
+
+select initcap(last_name)last_name from hr.employees
+where last_name =upper(last_name);
+
+--Display employees whose job_id contains _ and show it in InitCap.
+
+select initcap(job_id) from hr.employees
+
+SELECT INITCAP(REPLACE(job_id, '_', ' ')) AS job_title
+FROM hr.employees
+
+--Display InitCap names but do not change original data.
+
+select initcap(first_name)firstname,
+initcap(last_name)lastname from hr.employees;
+
+
+--Display first_name, a hyphen (-), and hire_date together using nested CONCAT
+
+ select first_name ||'_'||hire_date from hr.employees;
+
+
+--INITCAP converts first letter of each word to uppercase
+
+select initcap(first_name) from hr.employees
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--  date functions ()----
+
+
+-- Display employee_id, hire_date.
+
+select employee_id, to_date(hire_date,'dd-mon-yyyy')from hr.employees;
+
+--Display employees hired after 01-JAN-2008.
+
+select * from hr.employees
+ where hire_date >to_date('01-jan-2008','dd-mm-yyyy');
+ 
+--Display current system date
+
+select sysdate from dual;
+
+--Display current date and time using SYSDATE.
+
+select CURRENT_DATE from dual;
+
+--Display today’s date only (without time).
+
+select trunc(sysdate)today_date from dual;
+
+--Display yesterday’s date.
+
+select trunc(sysdate -1) from dual;
+
+
+--Display tomorrow’s date
+select trunc(sysdate +1) from dual;
+
+--Convert '24-01-2003' into date format.
+
+select to_date ('24-01-2003','dd-mm-yyyy') from dual;
+
+--Display employees hired after 01-JAN-2008.
+
+select *from hr.employees 
+where hire_date > to_date ('01-jan-2008','dd-mm-yyyy');
+
+--Display employees hired before 15-AUG-2005.
+
+select * from hr.employees
+where hire_date < to_date('15-aug-2005','dd-mm-yy');
+
+--Find employees hired on exact date 17-JUN-2003.
+
+select * from hr.employees
+where hire_date = to_date('17-jun-2003','dd-mm-yyyy');
+
+--Display employees hired between 01-JAN-2005 and 31-DEC-2007.
+
+select * from hr.employees
+where hire_date between to_date('01-jan-2005','dd-mm-yyyy') and to_date('31-dec-2007','dd-mm-yyyy');
+
+--Display employee joining year.
+
+select extract(year from to_date(hire_date,'dd-mm-yyyy')) from hr.employees;
+
+--Display employee joining month.
+
+select hire_date,extract(month from to_date(hire_date,'dd-mon-yy'))months from hr.employees;
+
+SELECT hire_date, TO_CHAR(hire_date, 'MON') AS month_name FROM hr.employees;
+
+--Display employee joining day.
+select hire_date, extract(day from to_date(hire_date,'dd-mm-yy'))from hr.employees;
+
+--Find employees who joined in year 2007.
+
+select * from hr.employees
+where extract(year from hire_date)=2007;
+
+--Find employees who joined in month January.
+
+select * from hr.employees
+where extract(month from hire_date)= 1 ;
+
+
+select * from hr.employees
+where extract(month from hire_date)= 'jan' ;
+
+select * from hr.employees
+where to_char(hire_date,'yyyy')='2007';
+
+-- display only day in table 
+
+select to_char(hire_date,'day')as year from hr.employees ;
+
+
+--display the duplicate salary on the table 
+select * from hr.employees
+
+select  salary ,count(salary)  from hr.employees
+group by salary 
+having count(salary)>2
+
+--display the duplicate name on table 
+
+select first_name ,count(first_name) from hr.employees
+group by first_name
+having count(first_name)  >= 2
+
+--78. How to find Employees joined in the last 3 months?
+ 
+select * from hr.employees 
+where 
